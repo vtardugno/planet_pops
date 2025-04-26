@@ -270,6 +270,8 @@ def create_transit_data(star_catalog_df, rcrit, alpha_small, alpha_big, sigma,si
             star = select_stars(star_catalog_df)
             if star["rrmscdpp06p0"] is not np.nan:
                 for iter in range(1000):
+                    if iter == 999:
+                        print("Warning: 1000 iterations reached without finding a stable system")
                     system_attempt = create_stable_planet_system_of_transits(star,rcrit, alpha_small, alpha_big, sigma,sigma_i,b_m,dist)
                     if system_attempt is None:
                         pass
@@ -326,6 +328,7 @@ def create_transit_data(star_catalog_df, rcrit, alpha_small, alpha_big, sigma,si
                             else:
                                 num_zeros = num_zeros + 1
                                 num_stars_total = num_stars_total + 1
+
     # for system in systems:
     #     trans_in_sys = []
     #     num_planets = len(system[0]) 
