@@ -19,4 +19,19 @@ python simulate.py --rcrit {rcrit} --alpha_small {alpha_small} --alpha_big {alph
 
 ### Outputs
 
-The script outputs two torch tensors per simulation: one contains the input parameters, and the other contains a histogram describing the observed planet multiplicity.
+Each simulation outputs two PyTorch tensors:
+
+- Input Parameters Tensor: Parameters used to generate the simulated population.
+
+- Observed Multiplicity Tensor: Histogram of transit multiplicities as *Kepler* would observe.
+
+## Notebooks
+
+The notebooks/ folder contains Jupyter notebooks for the following tasks:
+
+- planet-sim-emulator.ipynb: Trains a neural network that emulates the observed multiplicity histogram as a function of input population parameters.
+
+- emulate_0_or_1.ipynb: Trains a classifier to predict whether a given planetary system is Hill-stable, based on orbital parameters.
+
+- emcee_sampling.ipynb: Runs MCMC using the trained emulator and stability model to sample the posterior over population parameters given observed *Kepler* data.
+
