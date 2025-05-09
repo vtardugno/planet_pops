@@ -1,6 +1,6 @@
-# NASA \textsl{Kepler} Transit Population Simulator
+# NASA *Kepler* Transit Population Simulator
 
-The \textsl{Kepler} Transit Population Simulator is a Python-based tool designed to simulate \textsl{Kepler} transit observations by generating synthetic exoplanet populations. By specifying population parameters and a stellar catalog, users can generate \textsl{Kepler} transit observations.
+The *Kepler* Transit Population Simulator is a Python-based tool designed to simulate *Kepler* transit observations by generating synthetic exoplanet populations. By specifying population parameters and a stellar catalog, users can generate *Kepler* transit observations.
 
 ## Getting Started
 
