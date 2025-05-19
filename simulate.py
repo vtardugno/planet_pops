@@ -22,7 +22,7 @@ def main():
     parser.add_argument("--eta_zero", type=float, default=0.3, help="Fraction of stars with zero planets")
     parser.add_argument("--n", type=int, default=108014, help="Number of stars to process")
     parser.add_argument("--o", type=str, default="sample_output", help="Output label")
-    parser.add_argument("--output_transits", type=bool, default=False, help="True if you wish to output all transit information (periods, radii, etc), False if you wish to output the multiplicity")
+    parser.add_argument("--output_transits", action='store_true', help="True if you wish to output all transit information (periods, radii, etc), False if you wish to output the multiplicity")
 
     args = parser.parse_args()
 
@@ -45,6 +45,7 @@ def main():
     )
 
     if args.output_transits == True:
+        
         np.save(f"transit_info_{args.o}",data)
     
     else:

@@ -319,7 +319,7 @@ def create_transit_data(star_catalog_df, rcrit, alpha_small, alpha_big, sigma,si
                                     trans_in_sys.append(system_attempt[i,:])  
                                     
                             trans_in_sys = np.array(trans_in_sys)
-                                                        
+                                         
                             if len(trans_in_sys) > 0:
                                 num_trans += len(trans_in_sys)
                                 if output_transits == False:
