@@ -22,6 +22,7 @@ def main():
     parser.add_argument("--eta_zero", type=float, default=0.3, help="Fraction of stars with zero planets")
     parser.add_argument("--n", type=int, default=108014, help="Number of stars to process")
     parser.add_argument("--o", type=str, default="sample_output", help="Output label")
+    parser.add_argument("--output_transits", type=bool, default=False, help="True if you wish to output all transit information (periods, radii, etc), False if you wish to output the multiplicity")
 
     args = parser.parse_args()
 
@@ -40,26 +41,28 @@ def main():
 
     data, num_zeros = planet_population_simulator_FINAL.create_transit_data(
         catalog_df, args.rcrit, args.alpha_small, args.alpha_big,
-        args.sigma, args.sigma_i, args.b_m, args.dist, args.eta_zero, args.n
+        args.sigma, args.sigma_i, args.b_m, args.dist, args.eta_zero, args.n, args.output_transits
     )
 
+    if args.output_transits == True:
+        np.save(f"transit_info_{args.o}",data)
+    
+    else:
+        obs_mult = []
+        for j in data:
+            obs_mult.append(j["detected planets"])
+        hist1, _ = np.histogram(obs_mult,bins=range(1,12))
+        hist1 = np.insert(hist1,0,num_zeros)
+        data_y = torch.cat((data_y, torch.from_numpy(hist1).reshape((1,11))),0)
 
-    obs_mult = []
-    for j in data:
-        obs_mult.append(j["detected planets"])
-    hist1, _ = np.histogram(obs_mult,bins=range(1,12))
-    hist1 = np.insert(hist1,0,num_zeros)
-    data_y = torch.cat((data_y, torch.from_numpy(hist1).reshape((1,11))),0)
 
+        torch.save(data_x[1:],f"simulations_etazero/data_x_params_{args.o}")
+        torch.save(data_y[1:],f"simulations_etazero/data_y_mult_hist_{args.o}")
+    
     end_time = time.time()
-
-    # Output results
     print(f"Simulation completed in {end_time - start_time:.2f} seconds.")
-    print(f"Total transits detected: {len(data)}")
+    print(f"Total transit systems detected: {len(data)}")
     print(f"Total zero-transit systems: {num_zeros}")
-
-    torch.save(data_x[1:],f"simulations_etazero/data_x_params_{args.o}")
-    torch.save(data_y[1:],f"simulations_etazero/data_y_mult_hist_{args.o}")
 
 if __name__ == "__main__":
     main()

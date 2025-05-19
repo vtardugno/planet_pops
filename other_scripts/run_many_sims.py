@@ -15,7 +15,6 @@ import numpy as np
 #eta_zero = 0.0
 
 params = np.load("emcee_params.npy")[::9]
-print(len(params))
 rcrits = params[:,0]
 alpha_smalls = params[:,1] 
 alpha_bigs = params[:,2]

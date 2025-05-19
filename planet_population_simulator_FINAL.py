@@ -253,7 +253,7 @@ def is_transit_detected(obs_time_total,period,rp,rs,ms,mp,cdpp,bl=8.06,cl=8.11,d
     return detected, snr_val
 
 
-def create_transit_data(star_catalog_df, rcrit, alpha_small, alpha_big, sigma,sigma_i,b_m,dist,eta_zero,n=108014):
+def create_transit_data(star_catalog_df, rcrit, alpha_small, alpha_big, sigma,sigma_i,b_m,dist,eta_zero,n=108014,output_transits = False):
     
     transits = []
     sys_dicts = []
@@ -269,9 +269,11 @@ def create_transit_data(star_catalog_df, rcrit, alpha_small, alpha_big, sigma,si
         else: 
             star = select_stars(star_catalog_df)
             if star["rrmscdpp06p0"] is not np.nan:
-                for iter in range(1000):
-                    if iter == 999:
-                        print("Warning: 1000 iterations reached without finding a stable system")
+                for iter in range(100):
+                    if iter == 99:
+                        print("Warning: 100 iterations reached without finding a stable system")
+                        num_stars_total = n 
+                        break
                     system_attempt = create_stable_planet_system_of_transits(star,rcrit, alpha_small, alpha_big, sigma,sigma_i,b_m,dist)
                     if system_attempt is None:
                         pass
@@ -320,7 +322,11 @@ def create_transit_data(star_catalog_df, rcrit, alpha_small, alpha_big, sigma,si
                                                         
                             if len(trans_in_sys) > 0:
                                 num_trans += len(trans_in_sys)
-                                sys_dict = {"detected planets" : len(trans_in_sys)}
+                                if output_transits == False:
+                                    sys_dict = {"detected planets" : len(trans_in_sys)}
+                                elif output_transits == True:
+                                    sys_dict = {"detected planets" : range(len(trans_in_sys)), "planet periods": trans_in_sys[:,1], "planet radii": trans_in_sys[:,2], "planet masses": trans_in_sys[:,3]}
+                                             
                                 transits.append(np.array(trans_in_sys))
                                 sys_dicts.append(sys_dict)
                                 num_stars_total = num_stars_total + 1
@@ -337,7 +343,7 @@ def create_transit_data(star_catalog_df, rcrit, alpha_small, alpha_big, sigma,si
     #         if detected_or_not == 1:
     #             trans_in_sys.append(system[:,i])
     #     transits.append(trans_in_sys)
-    print("zeros: ", num_zeros,"num_stars_total: ",num_stars_total)
+    print("zeros: ", num_zeros,"num_trans_total: ",num_trans)
     return sys_dicts, num_zeros
     
 
